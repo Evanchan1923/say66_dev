@@ -1,4 +1,6 @@
 {
     "appService.defaultWebAppToDeploy": "/subscriptions/78bf9ce8-716d-47b2-9c01-f576cca4cb35/resourceGroups/say66_dev/providers/Microsoft.Web/sites/say66",
-    "appService.deploySubpath": "."
+    "appService.deploySubpath": ".",
+    "chatgpt.apiKey": "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",
+    "chatgpt.model": "gpt-3.5-turbo"
 }
