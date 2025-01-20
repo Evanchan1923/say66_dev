@@ -31,8 +31,7 @@ RUN git clone --branch $BRANCH $REPO_URL /app && \
     cd /app && git fetch --all && git reset --hard origin/$BRANCH && git lfs pull
 
 # Install Python dependencies
-COPY requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
 # Copy static and templates folders
 COPY static /app/static
