@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Form, UploadFile
+from fastapi import FastAPI, Form, UploadFile
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from jinja2 import Template
