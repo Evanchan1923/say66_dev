@@ -1,4 +1,4 @@
 uvicorn==0.22.0
 fastapi[standard]==0.115.6
-python-multipart==0.0.6
+python-multipart>=0.0.7
 Jinja2==3.1.2
