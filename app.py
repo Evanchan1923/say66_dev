@@ -1,10 +1,14 @@
-from flask import Flask, request, jsonify, render_template
+from fastapi import FastAPI, Request, Form, UploadFile
+from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
+from jinja2 import Template
 import random
-from flask_cors import CORS
 
-# 初始化 Flask 应用
-app = Flask(__name__, static_folder="static", template_folder="templates")
-CORS(app)  # Enable CORS for all routes
+# 初始化 FastAPI 应用
+app = FastAPI()
+
+# 挂载静态文件
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # 定义响应数据
 RESPONSES = [
@@ -16,25 +20,21 @@ RESPONSES = [
     "That's a great point!"
 ]
 
+# 首页路由
+@app.get("/", response_class=HTMLResponse)
+async def home():
+    with open("templates/index.html") as f:
+        template = Template(f.read())
+    return HTMLResponse(template.render())
+
 # API 路由 - POST 请求
-@app.route("/api/respond", methods=["POST"])
-def respond():
-    if request.is_json and "text" in request.json:
-        input_text = request.json["text"]
+@app.post("/api/respond")
+async def respond(text: str = Form(None), audio: UploadFile = None):
+    if text:
         response = random.choice(RESPONSES)
-        return jsonify({"input": input_text, "response": response})
-    elif "audio" in request.files:
-        audio_file = request.files["audio"]
+        return JSONResponse({"input": text, "response": response})
+    elif audio:
         response = random.choice(RESPONSES)
-        return jsonify({"input": "audio file received", "response": response})
+        return JSONResponse({"input": "audio file received", "response": response})
     else:
-        return jsonify({"error": "Invalid input. Provide 'text' in JSON or 'audio' as a file."}), 400
-
-# 首页路由 - GET 请求
-@app.route("/", methods=["GET"])
-def home():
-    return render_template("index.html")
-
-# 入口点，供 uvicorn 使用
-def create_app():
-    return app
+        return JSONResponse({"error": "Invalid input. Provide 'text' in form data or 'audio' as a file."}, status_code=400)
