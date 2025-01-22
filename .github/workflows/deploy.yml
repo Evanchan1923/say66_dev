@@ -19,21 +19,17 @@ jobs:
     - name: Build Docker image
       run: docker build -f Dockerfile_dev -t evan-app .
 
-    - name: Debug SSH
+    - name: Debug SSH key
       run: |
-        ssh -vvv -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519.pem Evan1923@20.55.25.167
+        ls -l ~/.ssh  # 列出 .ssh 目录
+        cat ~/.ssh/id_ed25519.pem  # 检查私钥内容（可选，仅用于调试）
+        ssh-keygen -y -f ~/.ssh/id_ed25519.pem  # 提取公钥，检查是否匹配
 
     - name: Set up SSH key
       run: |
         mkdir -p ~/.ssh  # 创建 .ssh 目录
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519.pem  # 写入私钥
         chmod 600 ~/.ssh/id_ed25519.pem  # 设置权限
-
-    - name: Debug SSH key
-      run: |
-        ls -l ~/.ssh  # 列出 .ssh 目录
-        cat ~/.ssh/id_ed25519.pem  # 检查私钥内容（可选，仅用于调试）
-        ssh-keygen -y -f ~/.ssh/id_ed25519.pem  # 提取公钥，检查是否匹配
 
     - name: Add Host Key
       run: |
