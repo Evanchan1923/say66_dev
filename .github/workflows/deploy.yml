@@ -18,6 +18,10 @@ jobs:
 
     - name: Build Docker image
       run: docker build -f Dockerfile_dev -t evan-app .
+      
+    - name: Debug SSH
+      run: |
+        ssh -vvv -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519.pem Evan1923@20.55.25.167
 
     - name: Set up SSH key
       run: |
