@@ -7,16 +7,21 @@ $(document).ready(function () {
             return;
         }
 
+        const formData = new FormData();
+        formData.append('text', textInput);
+
         $.ajax({
             url: '/api/respond',
             method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({ text: textInput }),
+            processData: false,
+            contentType: false,
+            data: formData,
             success: function (response) {
                 $('#responseText').text(`Input: ${response.input}, Response: ${response.response}`);
             },
-            error: function () {
-                $('#responseText').text('Error: Could not get a response from the server.');
+            error: function (xhr) {
+                const errorMsg = xhr.responseJSON?.error || "Unknown error occurred.";
+                $('#responseText').text(`Error: ${errorMsg}`);
             }
         });
     });
@@ -41,8 +46,9 @@ $(document).ready(function () {
             success: function (response) {
                 $('#responseText').text(`Input: ${response.input}, Response: ${response.response}`);
             },
-            error: function () {
-                $('#responseText').text('Error: Could not get a response from the server.');
+            error: function (xhr) {
+                const errorMsg = xhr.responseJSON?.error || "Unknown error occurred.";
+                $('#responseText').text(`Error: ${errorMsg}`);
             }
         });
     });
