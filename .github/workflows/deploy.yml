@@ -24,12 +24,10 @@ jobs:
         mkdir -p ~/.ssh
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519.pem
         chmod 600 ~/.ssh/id_ed25519.pem
-
-    - name: Debug SSH key
-      run: |
-        ls -l ~/.ssh  # 列出 .ssh 目录
-        cat ~/.ssh/id_ed25519.pem  # 检查私钥内容（可选，仅用于调试）
-        ssh-keygen -y -f ~/.ssh/id_ed25519.pem  # 提取公钥，检查是否匹配 123
+        
+        # 验证私钥是否正确生成
+        ls -l ~/.ssh
+        ssh-keygen -y -f ~/.ssh/id_ed25519.pem || echo "Failed to load private key"
 
     - name: Add Host Key
       run: |

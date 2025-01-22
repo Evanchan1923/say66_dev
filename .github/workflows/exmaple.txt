@@ -3,7 +3,7 @@ name: Deploy to Azure VM
 on:
   push:
     branches:
-      - main  # Trigger deployment on changes to the main branch
+      - main
 
 jobs:
   deploy:
@@ -17,19 +17,33 @@ jobs:
       uses: docker/setup-buildx-action@v2
 
     - name: Build Docker image
-      run: docker build  -f Dockerfile_dev -t evan-app .
+      run: docker build -f Dockerfile_dev -t evan-app .   #123
+
+
+    # Must Include ----begin SSH keys----- -----End SSh keys----
+    # When add Github-secrets-actions
+    - name: Set up SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.<github-secrets-Actions-Name> }}" > ~/.ssh/id_ed25519.pem
+        chmod 600 ~/.ssh/id_ed25519.pem
+        
+        # 验证私钥是否正确生成
+        ls -l ~/.ssh
+        ssh-keygen -y -f ~/.ssh/id_ed25519.pem || echo "Failed to load private key"
+
+    - name: Add Host Key
+      run: |
+        ssh-keyscan -H 20.55.25.167 >> ~/.ssh/known_hosts
 
     - name: Deploy to Azure VM
       run: |
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519.pem
-        chmod 600 ~/.ssh/id_ed25519.pem
-        scp -i ~/.ssh/id_ed25519.pem ./Dockerfile evan1923@20.55.25.167:~/app/
-        ssh -i ~/.ssh/id_ed25519.pem evan1923@20.55.25.167 "        
+        scp -i ~/.ssh/id_ed25519.pem ./Dockerfile_dev Evan1923@20.55.25.167:/home/Evan1923/say66_dev/
+        ssh -i ~/.ssh/id_ed25519.pem Evan1923@20.55.25.167 "
+          cd /home/Evan1923/say66_dev &&
+          mv Dockerfile_dev Dockerfile &&
           docker stop evan || true &&
           docker rm evan || true &&
-          docker build -t evan-app ~/app/ &&
+          docker build -t evan-app . &&
           docker run -d -p 5000:5000 --name evan evan-app
         "
-
-
-###!!!! Must Also Setup Github Repo secrets
