@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Form, UploadFile
+from fastapi import FastAPI, Form, UploadFile, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from jinja2 import Template
@@ -29,7 +29,12 @@ async def home():
 
 # API 路由 - POST 请求
 @app.post("/api/respond")
-async def respond(text: str = Form(None), audio: UploadFile = None):
+async def respond(request: Request, text: str = Form(None), audio: UploadFile = None):
+    # 打印收到的请求体内容
+    form = await request.form()
+    form_data = {key: value for key, value in form.items()}
+    print("Form data received:", form_data)
+
     if text:
         response = random.choice(RESPONSES)
         return JSONResponse({"input": text, "response": response})
@@ -37,4 +42,7 @@ async def respond(text: str = Form(None), audio: UploadFile = None):
         response = random.choice(RESPONSES)
         return JSONResponse({"input": "audio file received", "response": response})
     else:
-        return JSONResponse({"error": "Invalid input. Provide 'text' in form data or 'audio' as a file."}, status_code=400)
+        return JSONResponse(
+            {"error": "Invalid input. Provide 'text' in form data or 'audio' as a file."},
+            status_code=400,
+        )
