@@ -22,6 +22,9 @@ jobs:
 
     # Must Include ----begin SSH keys----- -----End SSh keys----
     # When add Github-secrets-actions
+
+    # Secondly -> the local ssh key must set without password !!!!!! 
+    # ~/.ssh/id_ed25519.pem       this file here
     - name: Set up SSH key
       run: |
         mkdir -p ~/.ssh

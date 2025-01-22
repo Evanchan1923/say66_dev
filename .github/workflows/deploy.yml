@@ -22,7 +22,7 @@ jobs:
     - name: Set up SSH key
       run: |
         mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519.pem
+        echo "${{secrets.SSH_PRIVATE_KEY}}" > ~/.ssh/id_ed25519.pem
         chmod 600 ~/.ssh/id_ed25519.pem
 
         # 验证私钥是否正确生成
