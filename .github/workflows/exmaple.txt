@@ -1,0 +1,32 @@
+name: Deploy to Azure VM
+
+on:
+  push:
+    branches:
+      - main  # Trigger deployment on changes to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build Docker image
+      run: docker build -t evan-app .
+
+    - name: Deploy to Azure VM
+      run: |
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        scp -i ~/.ssh/id_rsa ./Dockerfile <vm-user>@<vm-public-ip>:~/app/
+        ssh -i ~/.ssh/id_rsa <vm-user>@<vm-public-ip> "
+          docker stop evan || true &&
+          docker rm evan || true &&
+          docker build -t evan-app ~/app/ &&
+          docker run -d -p 5000:5000 --name evan evan-app
+        "
