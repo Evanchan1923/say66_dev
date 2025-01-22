@@ -11,20 +11,26 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2  # Pull the latest code
 
     - name: Set up Docker
-      uses: docker/setup-buildx-action@v2
+      uses: docker/setup-buildx-action@v2  # Prepare Docker environment
 
     - name: Build Docker image
-      run: docker build  -f Dockerfile_dev -t evan-app .
+      run: docker build -f Dockerfile_dev -t evan-app .
+
+    - name: Set up SSH key
+      run: |
+        mkdir -p ~/.ssh  # Ensure .ssh directory exists
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519.pem
+        chmod 600 ~/.ssh/id_ed25519.pem  # Set correct permissions for the key
 
     - name: Deploy to Azure VM
       run: |
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519.pem
-        chmod 600 ~/.ssh/id_ed25519.pem
-        scp -i ~/.ssh/id_ed25519.pem ./Dockerfile evan1923@20.55.25.167:~/app/
+        scp -i ~/.ssh/id_ed25519.pem ./Dockerfile_dev evan1923@20.55.25.167:~/app/
         ssh -i ~/.ssh/id_ed25519.pem evan1923@20.55.25.167 "
+          mkdir -p ~/app/ &&
+          mv ~/app/Dockerfile_dev ~/app/Dockerfile &&
           docker stop evan || true &&
           docker rm evan || true &&
           docker build -t evan-app ~/app/ &&
