@@ -31,7 +31,7 @@ jobs:
 
     - name: Deploy to Azure VM
       run: |
-        scp -i ~/.ssh/id_ed25519.pem ./Dockerfile_dev evan1923@20.55.25.167:~/app/
+        scp -i ~/.ssh/id_ed25519.pem ./Dockerfile_dev evan1923@20.55.25.167:/home/Evan1923/say66_dev/
         ssh -i ~/.ssh/id_ed25519.pem evan1923@20.55.25.167 "
           mkdir -p ~/app/ &&
           mv ~/app/Dockerfile_dev ~/app/Dockerfile &&
