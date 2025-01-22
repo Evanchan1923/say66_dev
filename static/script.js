@@ -11,7 +11,7 @@ $(document).ready(function () {
         formData.append('text', textInput);
 
         $.ajax({
-            url: '/api/respond',
+            url: 'http://<your-server-ip>:5000/api/respond', // 替换为后端实际地址
             method: 'POST',
             processData: false,
             contentType: false,
@@ -19,8 +19,13 @@ $(document).ready(function () {
             success: function (response) {
                 $('#responseText').text(`Input: ${response.input}, Response: ${response.response}`);
             },
-            error: function (xhr) {
+            error: function (xhr, status, error) {
                 const errorMsg = xhr.responseJSON?.error || "Unknown error occurred.";
+                console.error("AJAX Error:", {
+                    status: status,
+                    error: error,
+                    response: xhr.responseText,
+                });
                 $('#responseText').text(`Error: ${errorMsg}`);
             }
         });
@@ -38,7 +43,7 @@ $(document).ready(function () {
         formData.append('audio', audioInput);
 
         $.ajax({
-            url: '/api/respond',
+            url: 'http://<your-server-ip>:5000/api/respond', // 替换为后端实际地址
             method: 'POST',
             processData: false,
             contentType: false,
@@ -46,8 +51,13 @@ $(document).ready(function () {
             success: function (response) {
                 $('#responseText').text(`Input: ${response.input}, Response: ${response.response}`);
             },
-            error: function (xhr) {
+            error: function (xhr, status, error) {
                 const errorMsg = xhr.responseJSON?.error || "Unknown error occurred.";
+                console.error("AJAX Error:", {
+                    status: status,
+                    error: error,
+                    response: xhr.responseText,
+                });
                 $('#responseText').text(`Error: ${errorMsg}`);
             }
         });
