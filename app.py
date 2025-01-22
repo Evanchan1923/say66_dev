@@ -4,11 +4,21 @@ from fastapi.staticfiles import StaticFiles
 from jinja2 import Template
 import random
 
+from fastapi.middleware.cors import CORSMiddleware
+
 # 初始化 FastAPI 应用
 app = FastAPI()
 
 # 挂载静态文件
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # 或者指定前端域名，例如 ["http://localhost:3000"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # 定义响应数据
 RESPONSES = [
