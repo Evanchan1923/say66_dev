@@ -18,12 +18,12 @@ jobs:
 
     - name: Build Docker image
       run: docker build -f Dockerfile_dev -t evan-app .
-
+      
     - name: Set up SSH key
       run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SAY66_DEV_VM }}" > ~/.ssh/id_ed25519.pem
-        chmod 600 ~/.ssh/id_ed25519.pem
+        mkdir -p ~/.ssh  # 创建 .ssh 目录
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519.pem  # 写入私钥
+        chmod 600 ~/.ssh/id_ed25519.pem  # 设置权限
 
     - name: Add Host Key
       run: |
