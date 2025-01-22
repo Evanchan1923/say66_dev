@@ -22,7 +22,7 @@ jobs:
     - name: Set up SSH key
       run: |
         mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519.pem
+        echo "${{ secrets.SAY66_DEV_VM }}" > ~/.ssh/id_ed25519.pem
         chmod 600 ~/.ssh/id_ed25519.pem
 
     - name: Add Host Key
