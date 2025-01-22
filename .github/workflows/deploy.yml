@@ -18,7 +18,7 @@ jobs:
 
     - name: Build Docker image
       run: docker build -f Dockerfile_dev -t evan-app .
-      
+
     - name: Set up SSH key
       run: |
         mkdir -p ~/.ssh  # 创建 .ssh 目录
@@ -31,12 +31,12 @@ jobs:
 
     - name: Deploy to Azure VM
       run: |
-        scp -i ~/.ssh/id_ed25519.pem ./Dockerfile_dev Evan1923@20.55.25.167:/home/Evan1923/say66_dev/
-        ssh -i ~/.ssh/id_ed25519.pem Evan1923@20.55.25.167 "
-          mkdir -p ~/app/ &&
-          mv ~/app/Dockerfile_dev ~/app/Dockerfile &&
+        scp -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519.pem ./Dockerfile_dev Evan1923@20.55.25.167:/home/Evan1923/say66_dev/
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519.pem Evan1923@20.55.25.167 "
+          cd /home/Evan1923/say66_dev &&
+          mv Dockerfile_dev Dockerfile &&
           docker stop evan || true &&
           docker rm evan || true &&
-          docker build -t evan-app ~/app/ &&
+          docker build -t evan-app . &&
           docker run -d -p 5000:5000 --name evan evan-app
         "
