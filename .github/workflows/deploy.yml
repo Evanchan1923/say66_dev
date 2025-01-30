@@ -28,12 +28,12 @@ jobs:
 
     - name: Add Host Key
       run: |
-        ssh-keyscan -H 20.55.25.167 >> ~/.ssh/known_hosts
+        ssh-keyscan -H 20.248.241.202 >> ~/.ssh/known_hosts
 
     - name: Deploy to Azure VM
       run: |
-        scp -i ~/.ssh/id_ed25519.pem -r ./Dockerfile_dev Evan1923@20.55.25.167:/home/Evan1923/say66_dev/
-        ssh -i ~/.ssh/id_ed25519.pem Evan1923@20.55.25.167 "
+        scp -i ~/.ssh/id_ed25519.pem -r ./Dockerfile_dev Evan1923@20.248.241.202:/home/Evan1923/say66_dev/
+        ssh -i ~/.ssh/id_ed25519.pem Evan1923@20.248.241.202 "
           cd /home/Evan1923/say66_dev &&
           mv Dockerfile_dev Dockerfile &&
           docker stop evan || true &&

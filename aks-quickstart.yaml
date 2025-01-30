@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: evan  # Deployment name
+  labels:
+    app: evan
+spec:
+  replicas: 1  # Number of pods
+  selector:
+    matchLabels:
+      app: evan  # Must match template labels
+  template:
+    metadata:
+      labels:
+        app: evan  # Label used for selectors
+    spec:
+      containers:
+      - name: evan  # Container name
+        image: say66.azurecr.io/evan-app:latest  # Replace with your ACR image URL
+        ports:
+        - containerPort: 80  # Port exposed by the container
+        resources:  # Optional: Resource limits for the container
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+      restartPolicy: Always
