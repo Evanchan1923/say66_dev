@@ -37,8 +37,7 @@ jobs:
       
           # Copy the Dockerfile_dev to the remote server
           scp -i ~/.ssh/id_ed25519.pem -r ./Dockerfile_dev evan1923@20.248.241.202:/home/evan1923/say66_dev/
-      
-          # SSH into the server and deploy the Docker container
+
           ssh -i ~/.ssh/id_ed25519.pem evan1923@20.248.241.202 "
             cd /home/evan1923/say66_dev &&
             mv Dockerfile_dev Dockerfile &&
